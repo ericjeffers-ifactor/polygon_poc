@@ -1081,11 +1081,12 @@ public class PolygonTester {
     }
 
     private static void runTest(Polygon polygon, int num, PolygonHelper polygonHelper) {
-        Coordinate[] testPoints = addPoints(num);
+        Coordinate[] testInPoints = addInPoints(num);
+        Coordinate[] testOutPoints = addOutPoints(num);
         long start = System.currentTimeMillis();
         int numIn = 0;
         int numOut = 0;
-        for (Coordinate coordinate : testPoints) {
+        for (Coordinate coordinate : testInPoints) {
             if (polygonHelper.polyContains(polygon, coordinate, 6)) {
                 numIn += 1;
             } else {
@@ -1093,21 +1094,40 @@ public class PolygonTester {
             }
         }
         long end = System.currentTimeMillis();
-        System.out.println("Current Test: " + num + " points, Total time: " + (end - start) +" ms, Total in: " + numIn + " ,Total out: " + numOut);
+        System.out.println("Current In Test: " + num + " points, Total time: " + (end - start) +" ms, Total in: " + numIn + " ,Total out: " + numOut);
 
+        start = System.currentTimeMillis();
+        numIn = 0;
+        numOut = 0;
+        for (Coordinate coordinate : testOutPoints) {
+            if (polygonHelper.polyContains(polygon, coordinate, 6)) {
+                numIn += 1;
+            } else {
+                numOut += 1;
+            }
+        }
+        end = System.currentTimeMillis();
+        System.out.println("Current Out Test: " + num + " points, Total time: " + (end - start) +" ms, Total in: " + numIn + " ,Total out: " + numOut);
     }
 
-    private static Coordinate[] addPoints(int count) {
+
+    private static Coordinate[] addInPoints(int count) {
         Coordinate[] coords = new Coordinate[count];
         //Add in points
-        for (int i = 0; i<count/2; i++) {
+        for (int i = 0; i<count; i++) {
             coords[i] = new Coordinate(-73.8851, 40.8298);
         }
 
-        //Add out points
-        for (int i = count/2; i<count; i++) {
+        return coords;
+    }
+
+    private static Coordinate[] addOutPoints(int count) {
+        Coordinate[] coords = new Coordinate[count];
+        //Add in points
+        for (int i = 0; i<count; i++) {
             coords[i] = new Coordinate(-73.8837, 40.8203);
         }
+
         return coords;
     }
 }
